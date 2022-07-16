@@ -1,0 +1,14 @@
+{
+  "name": "userdetails",
+  "version": "1.0.0",
+  "description": "provide userdetails to keycloak users",
+  "main": "index.js",
+  "author": "Terence Zama",
+  "license": "MIT",
+  "devDependencies": {
+    "sequelize-cli": "^6.4.1"
+  },
+  "dependencies": {
+    "sequelize": "^6.21.3"
+  }
+}
