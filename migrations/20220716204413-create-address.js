@@ -20,8 +20,11 @@ module.exports = {
       line3: {
         type: Sequelize.TEXT
       },
-      geom: {
-        type: Sequelize.GEOMETRY
+      lat: {
+        type: Sequelize.DOUBLE
+      },
+      lng: {
+        type: Sequelize.DOUBLE
       },
       createdAt: {
         allowNull: false,
