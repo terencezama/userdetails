@@ -6,7 +6,11 @@
   "author": "Terence Zama",
   "license": "MIT",
   "devDependencies": {
+    "nodemon": "^2.0.19",
     "sequelize-cli": "^6.4.1"
+  },
+  "scripts": {
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "express": "^4.18.1",

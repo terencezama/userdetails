@@ -1,6 +1,7 @@
 const express = require("express");
-const { User, Address } = require("./models");
+
 let session = require("express-session");
+const { userMiddleware } = require("./feat/user/user.middleware.js");
 const app = express();
 let memoryStore = new session.MemoryStore();
 app.use(
@@ -13,23 +14,7 @@ app.use(
 );
 const keycloak = require("./config/keycloak-config.js").initKeycloak();
 app.use(keycloak.middleware());
-app.use(async (req, _, next) => {
-  if (Object.keys(req.kauth).length > 0) {
-    const { sub, given_name, family_name, email } =
-      req.kauth.grant.access_token.content;
-    let user = await User.findOne({ where: { sub: sub }, include: Address });
-    if (!user) {
-      user = await User.create({
-        sub: sub,
-        firstname: given_name,
-        lastname: family_name,
-        email,
-      });
-    }
-    req.user = user;
-  }
-  next();
-});
+app.use(userMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
