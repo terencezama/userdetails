@@ -1,13 +1,7 @@
-const {
-  findUserBySub,
-  updateUserById,
-  updateUserBySub,
-} = require("../feat/user/user.query");
+const { actionableList } = require("../feat/actionablelist");
+const { findUserBySub, updateUserBySub } = require("../feat/user/user.query");
 
-const { Address } = require("../models");
-const ACTION_CREATE = "create";
-const ACTION_UPDATE = "update";
-const ACTION_DELETE = "delete";
+const { Address, Identity } = require("../models");
 
 exports.me = async (req, res) => {
   const { sub } = req.user;
@@ -30,36 +24,16 @@ exports.update = async (req, res) => {
 exports.address = async (req, res) => {
   const { id, sub } = req.user;
   const body = req.body;
-  for (const element of body) {
-    const action = element.action;
-    delete element["action"];
-    switch (action) {
-      case ACTION_CREATE:
-        element["userId"] = id;
-        await Address.create(element);
-        break;
-      case ACTION_UPDATE:
-        element["userId"] = id;
-        const elementId = element.id;
-        delete element["id"];
-        await Address.update(element, {
-          where: {
-            id: elementId,
-          },
-        });
-        break;
-      case ACTION_DELETE:
-        await Address.delete(element);
-        break;
-
-      default:
-        break;
-    }
-  }
+  await actionableList(id, body, Address);
   res.send(await findUserBySub(sub));
 };
 
-exports.identity = async (req, res) => {};
+exports.identity = async (req, res) => {
+  const { id, sub } = req.user;
+  const body = req.body;
+  await actionableList(id, body, Identity);
+  res.send(await findUserBySub(sub));
+};
 exports.delete = (req, res) => {};
 
 exports.upload = (req, res) => {

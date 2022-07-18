@@ -17,7 +17,9 @@ module.exports = (app) => {
     [keycloak.protect("user"), actionableListMiddleware],
     controller.identity
   );
-  router.delete("/delete", keycloak.protect("user"), controller.update);
+  //This route should be protected by admin
+  // router.delete("/delete", keycloak.protect("user"), controller.update);
+
   router.post(
     "/upload/:imageType",
     keycloak.protect("user"),
