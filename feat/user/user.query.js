@@ -6,6 +6,13 @@ const findUserBySub = async function (sub) {
   });
 };
 
+const updateUserBySub = async function (sub, data) {
+  return User.update(data, {
+    where: { sub },
+  });
+};
+
 module.exports = {
   findUserBySub,
+  updateUserBySub,
 };
