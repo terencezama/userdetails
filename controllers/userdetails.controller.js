@@ -2,7 +2,7 @@ const uploadS3 = require("../config/s3-config");
 const { actionableList } = require("../feat/actionablelist");
 const { findUserBySub, updateUserBySub } = require("../feat/user/user.query");
 const singleUpload = uploadS3.single("image");
-const { Address, Identity } = require("../models");
+const { Address, Identity, File } = require("../models");
 
 exports.me = async (req, res) => {
   const { sub } = req.user;
@@ -37,7 +37,7 @@ exports.identity = async (req, res) => {
 };
 
 exports.upload = (req, res) => {
-  singleUpload(req, res, function (err) {
+  singleUpload(req, res, async (err) => {
     if (err) {
       return res.json({
         success: false,
@@ -48,6 +48,24 @@ exports.upload = (req, res) => {
         },
       });
     }
-    res.send(req.file);
+
+    const relationship = req.path.replace("/upload/");
+    const { sub } = req.user;
+    if (relationship === "profileImage") {
+      console.log("some profile update");
+      await updateUserBySub(sub, {
+        profileImage: req.file.location,
+      });
+    } else if (relationship === "identity") {
+      return Identity.update(
+        { image: req.file.location },
+        {
+          where: { id: req.body.id },
+        }
+      );
+    }
+
+    // await File.create({});
+    res.send(req.file.location);
   });
 };
