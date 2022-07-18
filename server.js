@@ -1,10 +1,12 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 
 let session = require("express-session");
 const { userMiddleware } = require("./feat/user/user.middleware.js");
 const app = express();
 let memoryStore = new session.MemoryStore();
+app.use(cors());
 app.use(
   session({
     secret: "qmfQBWyWwFAeaFqzAgmwYwuD",

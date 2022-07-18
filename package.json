@@ -12,10 +12,11 @@
   },
   "scripts": {
     "start": "nodemon server.js",
-    "local-s3": "serverless offline start"
+    "local-s3": "serverless offline --host 0.0.0.0 start"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.131.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
